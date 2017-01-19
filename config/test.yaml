@@ -1,0 +1,17 @@
+riptide2017:
+  joint_left_velocity_controller:
+    type: effort_controllers/JointVelocityController
+    joint: left_wheels
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint_right_velocity_controller:
+    type: effort_controllers/JointVelocityController
+    joint: right_wheels
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  mobile_base_controller:
+    type: "diff_drive_controller/DiffDriveController"
+    left_wheel: 'left_wheels'
+    right_wheel: 'right_wheels'
+    wheel_separation: 0.5588
+    wheel_radius: 0.0762
+    pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+    twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]

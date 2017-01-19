@@ -1,0 +1,8 @@
+<launch>
+  <rosparam file="$(find riptide2017)/config/test.yaml" command="load" />
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/riptide2017" args="--shutdown-time 1 --namespace=/riptide2017
+      mobile_base_controller">
+  </node>
+  <node ns="/riptide2017" name="riptide2017_controller" pkg="riptide2017" type="riptide2017_controller" />
+</launch>

@@ -1,0 +1,50 @@
+<robot name="test_robot">
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.16 0.16 0.12"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.085"/>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+  </link>
+  
+  <link name="left_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.008" radius="0.046"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+  
+  <joint name="base_to_lwheel" type="fixed">
+    <parent link="base_link"/>
+    <child link="lwheel"/>
+    <origin xyz="0 0.115 0.046" rpy="1.5708 0 0"/>
+  </joint>
+  
+  <link name="right_wheel">
+    <visual>
+      <geometry>
+        <cylinder length="0.008" radius="0.046"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+  </link>
+  
+  <joint name="base_to_rwheel" type="fixed">
+    <parent link="base_link"/>
+    <child link="rwheel"/>
+    <origin xyz="0 -0.115 0.046" rpy="-1.5708 0 0"/>
+  </joint>
+</robot>
