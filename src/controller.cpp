@@ -80,7 +80,7 @@ private:
   hardware_interface::JointStateInterface  jnt_state_interface;
   hardware_interface::EffortJointInterface jnt_pos_interface;
   hardware_interface::VelocityJointInterface jnt_velocity_interface;
-  const double WHEEL_RADIUS = 0.0762;
+  static const double WHEEL_RADIUS = 0.0762;
   double vel_tmp[2];
   double pos_tmp[2];
   double cmd[2];

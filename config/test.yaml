@@ -13,5 +13,9 @@ riptide2017:
     right_wheel: 'right_wheels'
     wheel_separation: 0.5588
     wheel_radius: 0.0762
+    linear:
+      x:
+        has_velocity_limits: True
+        max_velocity: 5.5
     pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
     twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]

@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
 	controller_manager
 	hardware_interface
 	std_msgs
+        image_transport
+        cv_bridge
 )
 
 ## System dependencies are found with CMake's conventions
@@ -138,6 +140,12 @@ add_executable(riptide2017_controller src/controller.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(riptide2017_controller
    ${catkin_LIBRARIES}
+)
+
+
+add_executable(riptide2017_vision src/VisionTest.cpp)
+target_link_libraries(riptide2017_vision
+  ${catkin_LIBRARIES} ${OpenCV_LIBRARIES}
 )
 
 #############
