@@ -1,10 +1,9 @@
 <launch>
  <node pkg="tf" type="static_transform_publisher" name="map_odom_tf" args="0 0 0 0 0 0 /map /odom 10" />
- <node pkg="tf" type="static_transform_publisher" name="odom_tf" args="0 0 0 0 0 0 /odom /base_link 10" />
 <node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen">
 <rosparam>
 local_costmap:
-  footprint: [ [-2.0,-2.0], [-2.0,2.0], [2.0,-2.0], [2.0,2.0]]
+  footprint: [ [0.4699,-0.3429], [0.4699,0.3429], [-0.4699,0.3429], [-0.4699,-0.3429] ]
   robot_radius: 0.5
   obstacle_layer:
     enabled: false
@@ -17,7 +16,7 @@ local_costmap:
 global_costmap:
   origin_x: -25.0
   origin_y: -25.0
-  footprint: [ [-2.0,-2.0], [-2.0,2.0], [2.0,-2.0], [2.0,2.0]]
+  footprint: [ [0.4699,-0.3429], [0.4699,0.3429], [-0.4699,0.3429], [-0.4699,-0.3429] ]
   robot_radius: 0.5
   obstacle_layer:
    enabled: false
@@ -29,7 +28,7 @@ TrajectoryPlannerROS:
   meter_scoring: True
   holonomic_robot: False
   max_vel_x: 5.5
-  max_vel_thata: 3.0
+  max_vel_theta: 3.0
 </rosparam>
 
 </node>
