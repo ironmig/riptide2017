@@ -42,7 +42,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>ros_control</build_depend>
   <run_depend>ros_control</run_depend>
-
+  <build_depend>image_geometry</build_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

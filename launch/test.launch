@@ -1,5 +1,8 @@
 <launch>
+  <param name="robot_description" textfile="$(find riptide2017)/urdf/robot.urdf" />
   <rosparam file="$(find riptide2017)/config/test.yaml" command="load" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output="screen" ns="/riptide2017" args="--shutdown-time 1 --namespace=/riptide2017
       mobile_base_controller">
