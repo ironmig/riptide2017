@@ -7,8 +7,8 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
+        - /TF1
         - /TF1/Frames1
-        - /TF1/Tree1/base_link1
       Splitter Ratio: 0.5
     Tree Height: 601
   - Class: rviz/Selection
@@ -106,13 +106,17 @@ Visualization Manager:
       Frames:
         All Enabled: false
         base_link:
-          Value: true
+          Value: false
         left_front_wheel:
           Value: false
         left_rear_wheel:
           Value: false
         left_wheels:
           Value: false
+        map:
+          Value: false
+        odom:
+          Value: true
         right_front_wheel:
           Value: false
         right_rear_wheel:
@@ -125,17 +129,19 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          left_wheels:
-            left_front_wheel:
-              {}
-            left_rear_wheel:
-              {}
-          right_wheels:
-            right_front_wheel:
-              {}
-            right_rear_wheel:
-              {}
+        map:
+          odom:
+            base_link:
+              left_wheels:
+                left_front_wheel:
+                  {}
+                left_rear_wheel:
+                  {}
+              right_wheels:
+                right_front_wheel:
+                  {}
+                right_rear_wheel:
+                  {}
       Update Interval: 0
       Value: true
   Enabled: true
@@ -162,7 +168,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 5.33994
+      Distance: 8.52572
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -174,10 +180,10 @@ Visualization Manager:
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.849797
+      Pitch: 0.639796
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.7454
+      Yaw: 4.77542
     Saved: ~
 Window Geometry:
   Displays:
@@ -195,5 +201,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1216
-  X: 55
+  X: 250
   Y: 50

@@ -33,7 +33,7 @@
       <geometry>
         <cylinder length="0.0381" radius="0.1524"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 -1.57 0" xyz="0 0 0"/>
       <material name="red">
         <color rgba="1 0 0 1"/>
       </material>
@@ -45,7 +45,7 @@
       <geometry>
         <cylinder length="0.0381" radius="0.1524"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 -1.57 0" xyz="0 0 0"/>
       <material name="green"></material>
     </visual>
   </link>
@@ -55,7 +55,7 @@
       <geometry>
         <cylinder length="0.0381" radius="0.1524"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 -1.57 0" xyz="0 0 0"/>
       <material name="red"></material>
     </visual>
   </link>
