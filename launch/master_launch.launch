@@ -1,5 +1,5 @@
 <launch>
-<param name="/rosserial_embeddedlinux/tcp_port" value="5801" />
+<param name="/rosserial_embeddedlinux/tcp_port" value="5802" />
 <include file="$(find riptide2017)/launch/roborio.launch" />
 <include file="$(find riptide2017)/launch/move_base.launch" />
 <include file="$(find riptide2017)/launch/camera.launch" />
