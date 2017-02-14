@@ -3,7 +3,7 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="0.9144 1.016 0.6096"/>
+        <box size="1.016 0.9144 0.6096"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0.3048"/>
       <material name="white">
@@ -21,7 +21,7 @@
       <geometry>
         <cylinder length="0.0381" radius="0.1524"/>
       </geometry>
-      <origin rpy="0 -1.57 0" xyz="0 0 0"/>
+      <origin rpy="0 -1.57 1.57" xyz="0 0 0"/>
       <material name="green">
         <color rgba="0 1 0 1"/>
       </material>
@@ -33,7 +33,7 @@
       <geometry>
         <cylinder length="0.0381" radius="0.1524"/>
       </geometry>
-      <origin rpy="0 -1.57 0" xyz="0 0 0"/>
+      <origin rpy="0 -1.57 1.57" xyz="0 0 0"/>
       <material name="red">
         <color rgba="1 0 0 1"/>
       </material>
@@ -45,7 +45,7 @@
       <geometry>
         <cylinder length="0.0381" radius="0.1524"/>
       </geometry>
-      <origin rpy="0 -1.57 0" xyz="0 0 0"/>
+      <origin rpy="0 -1.57 1.57" xyz="0 0 0"/>
       <material name="green"></material>
     </visual>
   </link>
@@ -55,39 +55,39 @@
       <geometry>
         <cylinder length="0.0381" radius="0.1524"/>
       </geometry>
-      <origin rpy="0 -1.57 0" xyz="0 0 0"/>
+      <origin rpy="0 -1.57 1.57" xyz="0 0 0"/>
       <material name="red"></material>
     </visual>
   </link>
   <joint name="left_to_left_front" type="fixed">
     <parent link="left_wheels"/>
     <child link="left_front_wheel"/>
-    <origin xyz="0 0.508 0" rpy="0 0 0"/>
+    <origin xyz="0.508 0 0" rpy="0 0 0"/>
   </joint>
   <joint name="left_to_left_read" type="fixed">
     <parent link="left_wheels"/>
     <child link="left_rear_wheel"/>
-    <origin xyz="0 -0.508 0" rpy="0 0 0"/>
+    <origin xyz="-0.508 0 0" rpy="0 0 0"/>
   </joint>
   <joint name="right_to_right_front" type="fixed">
     <parent link="right_wheels"/>
     <child link="right_front_wheel"/>
-    <origin xyz="0 0.508 0" rpy="0 0 0"/>
+    <origin xyz="0.508 0 0" rpy="0 0 0"/>
   </joint>
   <joint name="right_to_right_rear" type="fixed">
     <parent link="right_wheels"/>
     <child link="right_rear_wheel"/>
-    <origin xyz="0 -0.508 0" rpy="0 0 0"/>
+    <origin xyz="-0.508 0 0" rpy="0 0 0"/>
   </joint>
   <joint name="base_to_left_wheels" type="fixed">
     <parent link="base_link"/>
     <child link="left_wheels"/>
-    <origin xyz="-0.4571 0 0" rpy="0 0 0"/>
+    <origin xyz="0 -0.4571 0" rpy="0 0 0"/>
   </joint>
   <joint name="base_to_right_wheels" type="fixed">
     <parent link="base_link"/>
     <child link="right_wheels"/>
-    <origin xyz="0.4571 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0.4571 0" rpy="0 0 0"/>
   </joint>
   
 
