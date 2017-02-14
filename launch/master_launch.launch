@@ -1,7 +1,6 @@
 <launch>
 <param name="robot_description" textfile="$(find riptide2017)/urdf/robot.urdf" />
 <param name="/rosserial_embeddedlinux/tcp_port" value="5802" />
-<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
 <include file="$(find riptide2017)/launch/roborio.launch" />
 <include file="$(find riptide2017)/launch/move_base.launch" />
 <include file="$(find riptide2017)/launch/camera.launch" />
