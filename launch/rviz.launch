@@ -1,0 +1,3 @@
+<launch>
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find riptide2017)/riptide2017.rviz" required="true" />
+</launch>
