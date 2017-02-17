@@ -197,8 +197,16 @@ private:
     }
     void get3DPose(vector<vector<Point> >& contours)
     {
-        if (contours.size() != 2) printf("Contours not size 2\n");
-        if (contours[0].size() != 4 || contours[1].size() != 4) printf("Contours not rectangles\n");
+        if (contours.size() != 2) {
+            printf("Contours not size 2\n");
+            PublishDebug();
+            return;
+        } 
+        if (contours[0].size() != 4 || contours[1].size() != 4){
+             printf("Contours not rectangles\n");
+             PublishDebug();
+             return;
+         }
         vector<Point> left, right;
         if(contours[0][0].x > contours[1][0].x)
         {
@@ -213,7 +221,7 @@ private:
             combined[i]= Point2f(left[i].x, left[i].y);
         for (size_t i = 0; i < 4; i++)
             combined[4+i] = Point2f(right[i].x, right[i].y);
-        
+
         Mat rvec, tvec;
         solvePnP(objectPoints, combined, cameraModel.intrinsicMatrix(),
             cameraModel.distortionCoeffs(), rvec, tvec, false);
@@ -221,8 +229,7 @@ private:
         std::cout << "Contours " << combined << std::endl;
         std::cout << "Object " << objectPoints << std::endl;
         std::cout << "Translation" << tvec << std::endl << "Rotation: " << rvec << std::endl << std::endl;
-        
-        
+
         std::vector<Point3f> ref_frame_points;
         ref_frame_points.push_back(cv::Point3d(0.0, 0.0, 0.0));
         ref_frame_points.push_back(cv::Point3d(0.1, 0.0, 0.0));
@@ -379,10 +386,11 @@ private:
     }
     void PublishDebug()
     {
-      #ifdef DO_ROS_DEBUG
+      #ifdef DO_DEBUG_ROS
       cv_bridge::CvImage ros_color_debug;
-      ros_color_debug->Image = debug_image;
-      debug_publisher.publish(ros_color_debug);
+      ros_color_debug.image = debug_image;
+      ros_color_debug.encoding = "bgr8";
+      debug_publisher.publish(ros_color_debug.toImageMsg());
       #endif
       
       #ifdef GUI_DEBUG
