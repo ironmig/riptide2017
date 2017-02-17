@@ -10,6 +10,10 @@
 
 using namespace std;
 using namespace cv;
+
+#define DO_DEBUG_ROS
+#define GUI_DEBUG
+
 class LiftFinder
 {
 private:
@@ -19,6 +23,9 @@ private:
   ros::Subscriber cameraInfoSub;
   vector<Point3f> objectPoints;
   Mat debug_image;
+  #ifdef DO_DEBUG_ROS
+  image_transport::Publisher debug_publisher;
+  #endif
   private:
     void cameraInfoCallback(sensor_msgs::CameraInfo info)
     {
@@ -232,7 +239,7 @@ private:
         cv::line(debug_image, image_frame_points[0],
                  image_frame_points[3], CV_RGB(0, 0, 255), 2);
                  
-         imshow("DONE", debug_image);
+        PublishDebug();
 
     }
     void image_cb(const sensor_msgs::ImageConstPtr &msg)
@@ -260,11 +267,15 @@ private:
         
         Mat hsv;
         cvtColor(blurred, hsv, CV_BGR2HSV);
-        //imshow("HSV", hsv);
+        #ifdef GUI_DEBUG
+        imshow("HSV", hsv);
+        #endif
         
         Mat thresholded;
-        inRange(hsv, Scalar(47, 0.0, 73), Scalar(75.0, 255.0, 255), thresholded);
-        //imshow("Thresh", thresholded);
+        inRange(hsv, Scalar(47, 0.0, 73), Scalar(102.0, 255.0, 255), thresholded);
+        #ifdef GUI_DEBUG
+        imshow("Thresh", thresholded);
+        #endif
         
         vector<vector<Point> > contours;
         vector<vector<Point> > filteredContours;
@@ -358,16 +369,32 @@ private:
                     circle(finished,filteredContours[i][j], 5, colors[j], -1);
         }
         //printf("AFTER Contours=%lu \n", filteredContours.size(), hierarchy.size());
-        //imshow("ROIEDDD", roied);
+        #ifdef GUI_DEBUG
+        imshow("ROIEDDD", roied);
+        #endif
         debug_image = finished;
         
         if(filteredContours.size() == 2) get3DPose(filteredContours);
+        else PublishDebug();
+    }
+    void PublishDebug()
+    {
+      #ifdef DO_ROS_DEBUG
+      cv_bridge::CvImage ros_color_debug;
+      ros_color_debug->Image = debug_image;
+      debug_publisher.publish(ros_color_debug);
+      #endif
+      
+      #ifdef GUI_DEBUG
+      imshow("Processed", debug_image);
+      #endif
     }
 public:
     LiftFinder(ros::NodeHandle& nh) : image_transport(nh)
     {
         image_sub = image_transport.subscribe("/usb_cam/image_raw", 1, &LiftFinder::image_cb, this);
-        cameraInfoSub = nh.subscribe("/camera_info", 1, &LiftFinder::cameraInfoCallback, this);
+        cameraInfoSub = nh.subscribe("/usb_cam/camera_info", 1, &LiftFinder::cameraInfoCallback, this);
+        debug_publisher = image_transport.advertise("debug_color", 1);
 
         //Left Rectangle
         objectPoints.push_back(Point3f( -.130175, 0.0635, 0));  //TL
