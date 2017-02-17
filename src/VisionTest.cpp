@@ -17,20 +17,14 @@ private:
   image_transport::ImageTransport image_transport;
   image_transport::Subscriber image_sub;
   ros::Subscriber cameraInfoSub;
+  vector<Point3f> objectPoints;
+  Mat debug_image;
   private:
     void cameraInfoCallback(sensor_msgs::CameraInfo info)
     {
+        if (info.header.frame_id != "cam_front") return;
+        //std::cout << "Camera info " << std::endl;
         cameraModel.fromCameraInfo(info);
-    }
-    Mat targetMat()
-    {
-        //Represents the optimal target, each pixel = 1 mm
-        Mat target(127, 260, CV_8U);
-        size_t top1, top2, bot1, bot2 = 0;
-        
-        rectangle(target, Point(0, 0), Point (51,127), Scalar(255), CV_FILLED);
-        rectangle(target, Point(210, 0), Point (260,127), Scalar(255), CV_FILLED);
-        return target;
     }
     static vector<Point> getOrderedRectPoints(vector<Point>& rpoints)
     {
@@ -207,15 +201,39 @@ private:
             left = contours[0];
             right = contours[1];
         }
-        vector<Point> combined(8);
+        vector<Point2f> combined(8);
         for (size_t i = 0; i < 4; i++)
-            combined[i]= left[i];
+            combined[i]= Point2f(left[i].x, left[i].y);
         for (size_t i = 0; i < 4; i++)
-            combined[4+i] = right[i];
+            combined[4+i] = Point2f(right[i].x, right[i].y);
         
-        //Mat rvec, tvec;
-        //cv::solvePnP(, scenePoints, cameraModel.intrinsicMatrix(),
-        //    cameraModel.distortionCoeffs(), rvec, tvec, false);
+        Mat rvec, tvec;
+        solvePnP(objectPoints, combined, cameraModel.intrinsicMatrix(),
+            cameraModel.distortionCoeffs(), rvec, tvec, false);
+        
+        std::cout << "Contours " << combined << std::endl;
+        std::cout << "Object " << objectPoints << std::endl;
+        std::cout << "Translation" << tvec << std::endl << "Rotation: " << rvec << std::endl << std::endl;
+        
+        
+        std::vector<Point3f> ref_frame_points;
+        ref_frame_points.push_back(cv::Point3d(0.0, 0.0, 0.0));
+        ref_frame_points.push_back(cv::Point3d(0.1, 0.0, 0.0));
+        ref_frame_points.push_back(cv::Point3d(0.0, 0.1, 0.0));
+        ref_frame_points.push_back(cv::Point3d(0.0, 0.0, 0.1));
+        std::vector<Point2f> image_frame_points;
+        cv::projectPoints(ref_frame_points, rvec, tvec,
+                          cameraModel.intrinsicMatrix(),
+                          cameraModel.distortionCoeffs(), image_frame_points);
+        cv::line(debug_image, image_frame_points[0],
+                 image_frame_points[1], CV_RGB(255, 0, 0), 2);
+        cv::line(debug_image, image_frame_points[0],
+                 image_frame_points[2], CV_RGB(0, 255, 0), 2);
+        cv::line(debug_image, image_frame_points[0],
+                 image_frame_points[3], CV_RGB(0, 0, 255), 2);
+                 
+         imshow("DONE", debug_image);
+
     }
     void image_cb(const sensor_msgs::ImageConstPtr &msg)
     {
@@ -228,7 +246,7 @@ private:
         }
         
         Mat frame = cv_ptr->image;
-        imshow("Original Image", frame);
+        //imshow("Original Image", frame);
         
         int y_offset = frame.rows/2.0;
         Rect rect(0, y_offset, frame.cols, frame.rows - y_offset);
@@ -242,11 +260,11 @@ private:
         
         Mat hsv;
         cvtColor(blurred, hsv, CV_BGR2HSV);
-        imshow("HSV", hsv);
+        //imshow("HSV", hsv);
         
         Mat thresholded;
         inRange(hsv, Scalar(47, 0.0, 73), Scalar(75.0, 255.0, 255), thresholded);
-        imshow("Thresh", thresholded);
+        //imshow("Thresh", thresholded);
         
         vector<vector<Point> > contours;
         vector<vector<Point> > filteredContours;
@@ -339,17 +357,29 @@ private:
                 for (size_t j = 0; j < 4; j++)
                     circle(finished,filteredContours[i][j], 5, colors[j], -1);
         }
-        printf("AFTER Contours=%lu \n", filteredContours.size(), hierarchy.size());
-        imshow("ROIEDDD", roied);
-        imshow("DONE", finished);
-
+        //printf("AFTER Contours=%lu \n", filteredContours.size(), hierarchy.size());
+        //imshow("ROIEDDD", roied);
+        debug_image = finished;
+        
+        if(filteredContours.size() == 2) get3DPose(filteredContours);
     }
 public:
     LiftFinder(ros::NodeHandle& nh) : image_transport(nh)
     {
         image_sub = image_transport.subscribe("/usb_cam/image_raw", 1, &LiftFinder::image_cb, this);
-        cameraInfoSub = nh.subscribe("/usb_cam/camera_info", 1, &LiftFinder::cameraInfoCallback, this);
-        imshow("Thing", targetMat());
+        cameraInfoSub = nh.subscribe("/camera_info", 1, &LiftFinder::cameraInfoCallback, this);
+
+        //Left Rectangle
+        objectPoints.push_back(Point3f( -.130175, 0.0635, 0));  //TL
+        objectPoints.push_back(Point3f(  -.079375, 0.0635, 0));  //TR
+        objectPoints.push_back(Point3f(  -0.079375, -0.0635, 0)); //BL
+        objectPoints.push_back(Point3f(  -0.13075, -0.0635, 0)); //BR
+
+        //Right rectangle
+        objectPoints.push_back(Point3f(   0.079375, 0.0635, 0));  //TL
+        objectPoints.push_back(Point3f(  0.130175, 0.0635, 0));  //TR
+        objectPoints.push_back(Point3f(  0.130175, -0.0635, 0)); //BL
+        objectPoints.push_back(Point3f(   0.079375, -0.0635, 0)); //BR       
     }
 };
 
