@@ -7,6 +7,11 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include <image_geometry/pinhole_camera_model.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <tf/tf.h>
+#include <tf/transform_listener.h>
+#include <tf/transform_broadcaster.h>
+
 
 using namespace std;
 using namespace cv;
@@ -20,7 +25,9 @@ private:
   image_geometry::PinholeCameraModel cameraModel;
   image_transport::ImageTransport image_transport;
   image_transport::Subscriber image_sub;
+  tf::TransformListener listener;
   ros::Subscriber cameraInfoSub;
+  ros::Publisher posePub;
   vector<Point3f> objectPoints;
   Mat debug_image;
   #ifdef DO_DEBUG_ROS
@@ -245,7 +252,38 @@ private:
                  image_frame_points[2], CV_RGB(0, 255, 0), 2);
         cv::line(debug_image, image_frame_points[0],
                  image_frame_points[3], CV_RGB(0, 0, 255), 2);
-                 
+
+        //Calibration Grid transform
+        cv::Mat R;
+        cv::Rodrigues(rvec, R);
+
+          //Calibration Grid transform
+          tf::Vector3 object_translation(tf::Vector3(tvec.at<double>(0,0), tvec.at<double>(0,1), tvec.at<double>(0,2)));
+        tf::Matrix3x3 object_rotation(R.at<double>(0,0), R.at<double>(0,1), R.at<double>(0,2),
+                                      R.at<double>(1,0), R.at<double>(1,1), R.at<double>(1,2),
+                                      R.at<double>(2,0), R.at<double>(2,1), R.at<double>(2,2));
+          //tf::Quaternion quat(tf::Scalar(rvec.at(0,0)), tf::Scalar(rvec.at(0,1)), tf::Scalar(rvec.at(0,2)));
+        tf::Transform object_transform(object_rotation, object_translation);
+        tf::StampedTransform base_cam_tf;
+        try{
+          listener.lookupTransform("/base_link", "/cam_front",  
+                                   ros::Time(0), base_cam_tf);
+        }
+        catch (tf::TransformException ex){
+          ROS_ERROR("%s",ex.what());
+          ros::Duration(1.0).sleep();
+        }
+        tf::Transform fixed = object_transform * base_cam_tf;
+        tf::Vector3 t_trans  = fixed.getOrigin();
+        tf::Quaternion t_quat = fixed.getRotation();
+    
+        static tf::TransformBroadcaster br;
+        br.sendTransform(tf::StampedTransform(fixed, ros::Time::now(), "base_link", "lift"));
+        
+        geometry_msgs::PoseStamped pose;
+        pose.header.stamp = ros::Time::now();
+        posePub.publish(pose);
+        
         PublishDebug();
 
     }
@@ -403,6 +441,7 @@ public:
         image_sub = image_transport.subscribe("/usb_cam/image_raw", 1, &LiftFinder::image_cb, this);
         cameraInfoSub = nh.subscribe("/usb_cam/camera_info", 1, &LiftFinder::cameraInfoCallback, this);
         debug_publisher = image_transport.advertise("debug_color", 1);
+        posePub = nh.advertise<geometry_msgs::PoseStamped>("/lifter_pose", 1000);
 
         //Left Rectangle
         objectPoints.push_back(Point3f( -.130175, 0.0635, 0));  //TL

@@ -44,6 +44,7 @@
   <run_depend>move_base</run_depend>
   <run_depend>usb_cam</run_depend>
   <build_depend>image_geometry</build_depend>
+  <build_depend>tf</build_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

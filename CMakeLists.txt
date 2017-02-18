@@ -9,9 +9,12 @@ find_package(catkin REQUIRED COMPONENTS
 	controller_manager
 	hardware_interface
 	std_msgs
-        image_transport
-        cv_bridge
-        image_geometry
+    image_transport
+    cv_bridge
+    image_geometry
+    tf
+    tf2_sensor_msgs
+    tf2_geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions

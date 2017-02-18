@@ -3,46 +3,80 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <box size="1.016 0.9144 0.6096"/>
+        <box size="0.9144 0.9906 0.0508"/>
       </geometry>
-      <origin rpy="0 0 0" xyz="0 0 0.3048"/>
+      <origin rpy="0 0 0" xyz="0 0 0.0254"/>
       <material name="white">
         <color rgba="1 1 1 1"/>
       </material>
     </visual>
     <visual>
       <geometry>
-        <cylinder length="0.0381" radius="0.1524"/>
+        <cylinder length="0.0381" radius="0.0762"/>
       </geometry>
-      <origin rpy="0 -1.57 1.57" xyz="0.508 -0.3048 0"/>
+      <origin rpy="0 -1.57 1.57" xyz="0.254 -0.31115 0.0254"/>
       <material name="green">
         <color rgba="0 1 0 1"/>
       </material>
     </visual>
     <visual>
       <geometry>
-        <cylinder length="0.0381" radius="0.1524"/>
+        <cylinder length="0.0381" radius="0.0762"/>
       </geometry>
-      <origin rpy="0 -1.57 1.57" xyz="-0.508 -0.3048 0"/>
+      <origin rpy="0 -1.57 1.57" xyz="0 -0.31115 0.0254"/>
+      <material name="green">
+        <color rgba="0 1 0 1"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder length="0.0381" radius="0.0762"/>
+      </geometry>
+      <origin rpy="0 -1.57 1.57" xyz="0 0.31115 0.0254"/>
+      <material name="green">
+        <color rgba="0 1 0 1"/>
+      </material>
+    </visual>
+    <visual>
+      <geometry>
+        <cylinder length="0.0381" radius="0.0762"/>
+      </geometry>
+      <origin rpy="0 -1.57 1.57" xyz="-0.254 -0.31115 0.0254"/>
       <material name="red">
         <color rgba="1 0 0 1"/>
       </material>
     </visual>
     <visual>
       <geometry>
-        <cylinder length="0.0381" radius="0.1524"/>
+        <cylinder length="0.0381" radius="0.0762"/>
       </geometry>
-      <origin rpy="0 -1.57 1.57" xyz="0.508 0.3048 0"/>
+      <origin rpy="0 -1.57 1.57" xyz="0.254 0.31115 0.0254"/>
       <material name="green">
       </material>
     </visual>
     <visual>
       <geometry>
-        <cylinder length="0.0381" radius="0.1524"/>
+        <cylinder length="0.0381" radius="0.0762"/>
       </geometry>
-      <origin rpy="0 -1.57 1.57" xyz="-0.508 0.3048 0"/>
+      <origin rpy="0 -1.57 1.57" xyz="-0.254 0.31115 0.0254"/>
       <material name="green">
       </material>
     </visual>
   </link>
+  <link name="cam_front">
+    <visual>
+      <geometry>
+        <sphere radius="0.0762"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="blue">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="cam_front" type="fixed">
+    <parent link="base_link"/>
+    <child link="cam_front"/>
+    <origin xyz="0.1651 0 0.1778" rpy="-1.57 0 -1.57" />
+  </joint>
 </robot>
