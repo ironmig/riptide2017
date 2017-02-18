@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="usb_cam" type="usb_cam_node" name="usb_cam" respawn="true" respawn_delay="5" >
+  <node pkg="usb_cam" type="usb_cam_node" name="usb_cam" respawn="false" respawn_delay="5" >
    <param name="camera_name" value="cam_front" />
    <param name="camera_frame_id" value="cam_front" />
    <param name="autofocus" value="false" />
